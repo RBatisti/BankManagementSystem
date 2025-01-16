@@ -11,11 +11,8 @@ public class Conta {
         this.conta = conta;
     }
 
-    public static Conta criarConta(Scanner scan) {
+    public static Conta criarConta(Scanner scan, int numeroConta) {
         double quantidade;
-        System.out.print("Insira o número da conta: ");
-        int numeroConta = scan.nextInt();
-        scan.nextLine();
 
         System.out.print("Haverá um deposito inicial (s/n)? ");
         char resposta = scan.next().charAt(0);
@@ -31,19 +28,9 @@ public class Conta {
 
         System.out.print("Qual é o nome do titular: ");
         String nome = scan.nextLine();
+        System.out.println();
 
         return new Conta(nome, quantidade, numeroConta);
-    }
-
-    public static void mostrarMenu() {
-        System.out.print("""
-                1) Realizar saque
-                2) Realizar deposito
-                3) Alterar nome
-                4) Exibir informações
-                5) Encerrar programa
-                
-                Sua opção:\s""");
     }
 
     public void deposito(Scanner scan) {
@@ -56,11 +43,24 @@ public class Conta {
     public void saque(Scanner scan) {
         System.out.print("Quanto você deseja sacar? ");
         double quantidade = scan.nextDouble();
-        this.saldo -= (quantidade + 5);
+        scan.nextLine();
+        if (this.saldo < quantidade) {
+            System.out.println("Saldo insuficiente!\n");
+        } else {
+            this.saldo -= quantidade;
+        }
+    }
+
+    public int getConta() {
+        return this.conta;
     }
 
     public double getSaldo() {
         return this.saldo;
+    }
+
+    public String getNome() {
+        return this.nome;
     }
 
     public void setNome(Scanner scan) {
@@ -70,7 +70,6 @@ public class Conta {
 
     @Override
     public String toString() {
-        return "Account " + this.conta + " Holder: " + this.nome + ", Balance: $ " + this.saldo;
+        return String.format("Conta: " + this.conta + ", Proprietário: " + this.nome + ", Saldo: $%.2f", this.saldo);
     }
-
 }
